@@ -14,7 +14,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        nif: ["2.17", "2.16", "2.15", "2.14"]
+        nif: ["2.14"]
         job:
           - { target: arm-unknown-linux-gnueabihf , os: ubuntu-20.04 , use-cross: true }
           - { target: aarch64-unknown-linux-gnu   , os: ubuntu-20.04 , use-cross: true }
@@ -45,7 +45,7 @@ jobs:
 
     - name: Build the project
       id: build-crate
-      uses: philss/rustler-precompiled-action@v1.0.1
+      uses: philss/rustler-precompiled-action@v1.1.0
       with:
         project-name: walle
         project-version: ${{ env.PROJECT_VERSION }}

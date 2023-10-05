@@ -9,7 +9,7 @@ defmodule Walle.MixProject do
     [
       app: :walle,
       deps: [
-        {:rustler, "~> 0.29"},
+        {:rustler, "~> 0.29", optional: true},
         {:rustler_precompiled, "~> 0.7"}
       ],
       description: @description,
@@ -21,11 +21,12 @@ defmodule Walle.MixProject do
         licenses: ["Apache-2.0"],
         links: %{"GitHub" => @source_url},
         files: [
-          "mix.exs",
-          "native",
           "lib",
-          "LICENSE",
-          "README.md"
+          "native/walle/.cargo",
+          "native/walle/src",
+          "native/walle/Cargo*",
+          "checksum-*.exs",
+          "mix.exs"
         ]
       ],
       source_url: @source_url,
