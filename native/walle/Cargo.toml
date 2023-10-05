@@ -1,0 +1,14 @@
+[package]
+name = "walle"
+version = "0.1.0"
+authors = ["Sonny Scroggin"]
+edition = "2021"
+
+[lib]
+name = "walle"
+path = "src/lib.rs"
+crate-type = ["cdylib"]
+
+[dependencies]
+rustler = "0.29.1"
+ethers = "2.0"
