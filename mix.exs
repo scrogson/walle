@@ -10,14 +10,15 @@ defmodule Walle.MixProject do
       app: :walle,
       deps: [
         {:rustler, "~> 0.29", optional: true},
-        {:rustler_precompiled, "~> 0.7"}
+        {:rustler_precompiled, "~> 0.7"},
+        {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
       ],
       description: @description,
       elixir: "~> 1.14",
       name: "Walle",
       package: [
         maintainers: ["scrogson"],
-        name: "Walle",
+        name: "walle",
         licenses: ["Apache-2.0"],
         links: %{"GitHub" => @source_url},
         files: [
