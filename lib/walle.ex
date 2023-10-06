@@ -10,11 +10,18 @@ defmodule Walle do
     crate: "walle",
     base_url: "https://github.com/scrogson/walle/releases/download/v#{version}",
     force_build: System.get_env("RUSTLER_BUILD") in ["1", true] or env_config[:walle],
-    targets:
-      Enum.uniq(
-        ["aarch64-unknown-linux-musl", "x86_64-unknown-freebsd"] ++
-          RustlerPrecompiled.Config.default_targets()
-      ),
+    nif_versions: ["2.14"],
+    targets: [
+      "aarch64-apple-darwin",
+      "aarch64-unknown-linux-gnu",
+      "aarch64-unknown-linux-musl",
+      "arm-unknown-linux-gnueabihf",
+      "x86_64-apple-darwin",
+      "x86_64-pc-windows-gnu",
+      "x86_64-pc-windows-msvc",
+      "x86_64-unknown-linux-gnu",
+      "x86_64-unknown-linux-musl"
+    ],
     version: version
 
   @doc """
