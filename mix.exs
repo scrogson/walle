@@ -22,6 +22,7 @@ defmodule Walle.MixProject do
         licenses: ["Apache-2.0"],
         links: %{"GitHub" => @source_url},
         files: [
+          "README.md",
           "lib",
           "native/walle/.cargo",
           "native/walle/src",
