@@ -27,12 +27,26 @@ defmodule Walle do
   @doc """
   Verifies that `signature` on `message` was produced by `address`
   """
-  def verify(_message, _signature, _address), do: :erlang.nif_error(:nif_not_loaded)
+  def verify(_message, _signature, _address), do: nif_error()
 
   @doc """
   Recovers the Ethereum address which was used to sign the given message.
 
   Recovery signature data uses ‘Electrum’ notation, this means the `v` value is expected to be either `27` or `28`.
   """
-  def recover(_message, _signature), do: :erlang.nif_error(:nif_not_loaded)
+  def recover(_message, _signature), do: nif_error()
+
+  @doc """
+  Creates a new random encrypted JSON with the provided password.
+  """
+  def new_keystore(_password), do: nif_error()
+
+  @doc """
+  Decrypts an encrypted JSON keystore from JSON string.
+
+  Decryption supports the [Scrypt](https://tools.ietf.org/html/rfc7914.html) and [PBKDF2](https://ietf.org/rfc/rfc2898.txt) key derivation functions.
+  """
+  def decrypt_keystore(_json_string, _password), do: nif_error()
+
+  defp nif_error, do: :erlang.nif_error(:nif_not_loaded)
 end

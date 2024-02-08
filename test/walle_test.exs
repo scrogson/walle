@@ -46,4 +46,37 @@ defmodule WalleTest do
                {:error, "Signature verification failed. Expected 0x7099…79c8, got 0xf39f…2266"}
     end
   end
+
+  describe "new_keystore/2" do
+    test "generates a new keystore encrypted with a password" do
+      assert {:ok, keystore} = Walle.new_keystore("password")
+
+      assert %{
+               "crypto" => %{
+                 "cipher" => "aes-128-ctr",
+                 "cipherparams" => %{"iv" => _},
+                 "ciphertext" => _,
+                 "kdf" => "scrypt",
+                 "kdfparams" => %{
+                   "dklen" => 32,
+                   "n" => 8192,
+                   "p" => 1,
+                   "r" => 8,
+                   "salt" => _
+                 },
+                 "mac" => _
+               },
+               "id" => _,
+               "version" => 3
+             } = Jason.decode!(keystore)
+    end
+  end
+
+  describe "decrypt_keystore/2" do
+    test "decrypts the wallet JSON keystore" do
+      password = "password"
+      assert {:ok, keystore} = Walle.new_keystore(password)
+      assert {:ok, _private_key} = Walle.decrypt_keystore(keystore, password)
+    end
+  end
 end
