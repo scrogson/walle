@@ -3,14 +3,15 @@ defmodule Walle.MixProject do
 
   @description "NIF library for recovering ethereum based wallet addresses."
   @source_url "https://github.com/scrogson/walle"
-  @version "0.2.0"
+  @version "0.3.0"
 
   def project do
     [
       app: :walle,
       deps: [
-        {:rustler, "~> 0.29", optional: true},
+        {:rustler, "~> 0.30", optional: true},
         {:rustler_precompiled, "~> 0.7"},
+        {:jason, "~> 1.4", optional: true},
         {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
       ],
       description: @description,
