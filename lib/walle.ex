@@ -9,7 +9,7 @@ defmodule Walle do
     otp_app: :walle,
     crate: "walle",
     base_url: "https://github.com/scrogson/walle/releases/download/v#{version}",
-    force_build: System.get_env("RUSTLER_BUILD") in ["1", true] or env_config[:walle],
+    force_build: System.get_env("RUSTLER_BUILD") in ["1", "true"] or env_config[:walle],
     nif_versions: ["2.15"],
     targets: [
       "aarch64-apple-darwin",
@@ -47,6 +47,26 @@ defmodule Walle do
   Decryption supports the [Scrypt](https://tools.ietf.org/html/rfc7914.html) and [PBKDF2](https://ietf.org/rfc/rfc2898.txt) key derivation functions.
   """
   def decrypt_keystore(_json_string, _password), do: nif_error()
+
+  @doc """
+  Returns the public address from the given private key.
+  """
+  def public_address(_private_key), do: nif_error()
+
+  @doc """
+  Signs the given message with the provided private key.
+  """
+  def sign_message(_message, _private_key), do: nif_error()
+
+  @doc """
+  Signs typed data (EIP-712) with the provided private key.
+  """
+  def sign_typed_data(_typed_data, _private_key), do: nif_error()
+
+  @doc """
+  Recovers the address which signed the typed data (EIP-712).
+  """
+  def recover_typed_data(_typed_data, _signature), do: nif_error()
 
   defp nif_error, do: :erlang.nif_error(:nif_not_loaded)
 end
