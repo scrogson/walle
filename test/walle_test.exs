@@ -6,18 +6,18 @@ defmodule WalleTest do
     {:ok,
      message: "Hello, world!",
      wallet_1: %{
-       address: "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+       address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
        signature:
          "9dba579c978220c653b992b02817dc676a08486dc12f9fb0e9898b506a92fae97770a8198ae4915e9e43504d32cefaf5f88b4e6c1ad02d0d0f8604880de2aa251b"
      },
      wallet_2: %{
-       address: "0x70997970c51812dc3a010c7d01b50e0d17dc79c8",
+       address: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
        signature:
          "3e5991581f15944dce56238e3efe40bbeb383c7e768b9847646e91be70c80a322a24b735fcfe81b2ef72ea5c67566a5b4b5d197cf65cf105a343d6393820a9d91b"
      },
      private: %{
        private_key: "0b50ebd4eec51a753db1e8af2ab44c83c867dfe10f2d677cc4183cf1570e5585",
-       address: "0x63d8090c7353a57485965251506dd2a15244dee5"
+       address: "0x63d8090c7353A57485965251506Dd2a15244DEe5"
      }}
   end
 
@@ -89,7 +89,7 @@ defmodule WalleTest do
     test "returns the public address from the private key", %{private: private} do
       assert {:ok, address} = Walle.public_address(private.private_key)
 
-      assert String.downcase(address) == private.address
+      assert address == private.address
     end
   end
 

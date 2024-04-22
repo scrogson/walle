@@ -1,16 +1,13 @@
 # Walle
 
-> NIF for verifying Ethereum wallet signatures
+> NIF for working with Ethereum wallets
 
 ## Installation
-
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `walle` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
   [
-    {:walle, "~> 0.1.0"}
+    {:walle, "~> 0.5.0"}
   ]
 end
 ```
