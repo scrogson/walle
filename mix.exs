@@ -11,7 +11,7 @@ defmodule Walle.MixProject do
       deps: [
         {:rustler, "~> 0.30", optional: true},
         {:rustler_precompiled, "~> 0.7"},
-        {:jason, "~> 1.4", optional: true},
+        {:jason, "~> 1.4"},
         {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
       ],
       description: @description,

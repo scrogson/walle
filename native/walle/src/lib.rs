@@ -1,27 +1,25 @@
+mod runtime;
+mod wallet;
+
+use crate::runtime::block_on;
 use ethers::{
     core::{types::transaction::eip712::TypedData, utils::to_checksum},
     signers::{Signer, Wallet},
     types::{Address, Signature},
     utils::hex,
 };
-use once_cell::sync::Lazy;
-use std::future::Future;
+use rustler::{Env, ResourceArc, Term};
 use std::io::Write;
 use std::str::FromStr;
-use tokio::runtime::{Builder, Runtime};
 
-static TOKIO: Lazy<Runtime> = Lazy::new(|| {
-    Builder::new_current_thread()
-        .build()
-        .expect("Walle: Failed to start tokio runtime")
-});
+type PrivateKey = [u8; 32];
 
-pub fn block_on<F: Future>(future: F) -> F::Output
-where
-    F: Future + Send + 'static,
-    F::Output: Send + 'static,
-{
-    TOKIO.block_on(future)
+pub struct PrivateKeyRef(pub PrivateKey);
+
+impl PrivateKeyRef {
+    pub fn new(private_key: PrivateKey) -> ResourceArc<PrivateKeyRef> {
+        ResourceArc::new(PrivateKeyRef(private_key))
+    }
 }
 
 #[rustler::nif]
@@ -29,7 +27,22 @@ fn recover(message: String, signature: String) -> Result<String, String> {
     let signature = Signature::from_str(&signature).map_err(|e| e.to_string())?;
 
     match signature.recover(message) {
-        Ok(address) => Ok(format!("{:#x}", address)),
+        Ok(address) => Ok(to_checksum(&address, None)),
+        Err(e) => Err(e.to_string()),
+    }
+}
+
+#[rustler::nif(schedule = "DirtyCpu")]
+fn recover_typed_data(typed_data: String, signature: String) -> Result<String, String> {
+    let typed_data: TypedData = match serde_json::from_str(&typed_data) {
+        Ok(typed_data) => typed_data,
+        Err(e) => return Err(e.to_string()),
+    };
+
+    let signature = Signature::from_str(&signature).map_err(|e| e.to_string())?;
+
+    match signature.recover_typed_data(&typed_data) {
+        Ok(address) => Ok(to_checksum(&address, None)),
         Err(e) => Err(e.to_string()),
     }
 }
@@ -98,31 +111,31 @@ fn sign_typed_data(typed_data: String, private_key: String) -> Result<String, St
     Ok(format!("0x{}", signature.to_string()))
 }
 
-#[rustler::nif(schedule = "DirtyCpu")]
-fn recover_typed_data(typed_data: String, signature: String) -> Result<String, String> {
-    let typed_data: TypedData = match serde_json::from_str(&typed_data) {
-        Ok(typed_data) => typed_data,
-        Err(e) => return Err(e.to_string()),
-    };
-
-    let signature = Signature::from_str(&signature).map_err(|e| e.to_string())?;
-
-    match signature.recover_typed_data(&typed_data) {
-        Ok(address) => Ok(format!("{:#x}", address)),
-        Err(e) => Err(e.to_string()),
-    }
+fn load(env: Env, _: Term) -> bool {
+    rustler::resource!(PrivateKeyRef, env);
+    true
 }
 
 rustler::init!(
-    "Elixir.Walle",
+    "Elixir.Walle.Native",
     [
-        recover,
         verify,
+        recover,
+        recover_typed_data,
         new_keystore,
         decrypt_keystore,
         public_address,
         sign_message,
         sign_typed_data,
-        recover_typed_data
-    ]
+        wallet::new,
+        wallet::from_seed_phrase,
+        wallet::from_private_key,
+        wallet::from_keystore,
+        wallet::to_keystore,
+        wallet::export_private_key,
+        wallet::address,
+        wallet::sign_message,
+        wallet::sign_typed_data
+    ],
+    load = load
 );
