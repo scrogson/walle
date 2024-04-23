@@ -3,7 +3,7 @@ defmodule Walle.MixProject do
 
   @description "NIF library for recovering ethereum based wallet addresses."
   @source_url "https://github.com/scrogson/walle"
-  @version "0.4.0"
+  @version "0.5.0"
 
   def project do
     [
