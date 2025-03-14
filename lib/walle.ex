@@ -66,4 +66,22 @@ defmodule Walle do
   @deprecated "Use Walle.Wallet.sign_typed_data/2 instead"
   def sign_typed_data(typed_data, private_key),
     do: Native.sign_typed_data(typed_data, private_key)
+
+  defmodule AsyncRuntimeOptions do
+    defstruct worker_threads: nil, enable_time: true, enable_io: true
+  end
+
+  def configure_async_runtime! do
+    case Application.get_env(:walle, :async_runtime_options, %Walle.AsyncRuntimeOptions{}) do
+      %Walle.AsyncRuntimeOptions{} = options ->
+        %{options | worker_threads: System.schedulers_online()}
+
+      other ->
+        raise """
+        Unexpected async runtime options.
+        Expected: %Walle.AsyncRuntimeOptions{}
+        Found: #{inspect(other)}
+        """
+    end
+  end
 end

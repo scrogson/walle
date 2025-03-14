@@ -1,14 +1,18 @@
 defmodule Walle.Native do
   @moduledoc false
 
-  version = Mix.Project.config()[:version]
-  env_config = Application.compile_env(:rustler_precompiled, :force_build, [])
+  config = Mix.Project.config()
+  version = config[:version]
+
+  force_build = Application.compile_env(:rustler_precompiled, :force_build, [])
+  source_url = Application.compile_env(:walle, :source_url, config[:source_url])
 
   use RustlerPrecompiled,
     otp_app: :walle,
     crate: "walle",
-    base_url: "https://github.com/scrogson/walle/releases/download/v#{version}",
-    force_build: System.get_env("RUSTLER_BUILD") in ["1", "true"] or env_config[:walle],
+    base_url: "#{source_url}/releases/download/v#{version}",
+    force_build: System.get_env("WALLE_BUILD") in ["1", "true"] or force_build[:walle],
+    load_data_fun: {Walle, :configure_async_runtime!},
     nif_versions: ["2.15"],
     targets: [
       "aarch64-apple-darwin",
