@@ -9,7 +9,7 @@ defmodule Walle.MixProject do
     [
       app: :walle,
       deps: [
-        {:rustler, "~> 0.30", optional: true},
+        {:rustler, "~> 0.34", optional: true},
         {:rustler_precompiled, "~> 0.7"},
         {:jason, "~> 1.4"},
         {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
